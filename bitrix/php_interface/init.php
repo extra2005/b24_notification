@@ -29,14 +29,15 @@ class CalendarEditNotify{
 				'setDefaultLimit' => false
 		));
 		
-		if($event[0]['MEETING_STATUS'] == "Q" && (self::$_currentEvent['NAME']!=$entryFields['NAME'] || self::$_currentEvent['DATE_FROM']!=$fromTo['DATE_FROM'] || self::$_currentEvent['DATE_TO']!=$fromTo['DATE_TO'])){
+		$location = CCalendar::GetTextLocation($entryFields["LOCATION"]);
+		if(($event[0]['MEETING_STATUS'] == "Q" && $location!="") && (self::$_currentEvent['NAME']!=$entryFields['NAME'] || self::$_currentEvent['DATE_FROM']!=$fromTo['DATE_FROM'] || self::$_currentEvent['DATE_TO']!=$fromTo['DATE_TO'])){
 			//CCalendarNotify::ClearNotifications($entryFields['PARENT_ID']);
 			CCalendarNotify::Send(array(
 				'mode' => 'invite',
 				'name' => $entryFields['NAME'],
 				'from' => $fromTo['DATE_FROM'],
 				'to' => $fromTo['DATE_TO'],
-				'location' => CCalendar::GetTextLocation($entryFields["LOCATION"]),
+				'location' => $location,
 				"guestId" => $entryFields['OWNER_ID'],
 				"eventId" => $entryFields['PARENT_ID'],//$id,
 				"userId" => $entryFields['~MEETING']['MEETING_CREATOR'],
